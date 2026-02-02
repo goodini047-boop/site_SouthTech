@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Автосервис | Премиальный уход и ремонт</title>
+  <meta name="description" content="Премиальный автосервис: диагностика, ремонт, обслуживание. Запись онлайн 24/7." />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <!-- Scroll-synced car (PNG) -->
+  <div class="car-layer" aria-hidden="true">
+    <div class="car" id="car">
+      <div class="car-shadow"></div>
+      <img class="car__img" src="assets/car.png" alt="" />
+    </div>
+  </div>
+
+  <!-- Topbar -->
+  <header class="topbar" data-elevate>
+    <a class="brand" href="#top" aria-label="На главную">
+      <span class="brand__mark"></span>
+      <span class="brand__text">Nord Garage</span>
+    </a>
+
+    <nav class="nav" aria-label="Навигация">
+      <a href="#about">О нас</a>
+      <a href="#services">Услуги</a>
+      <a href="#advantages">Преимущества</a>
+      <a href="#pricing">Цены</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+
+    <div class="topbar__right">
+      <a class="link" href="tel:+70000000000">+7 (000) 000-00-00</a>
+      <button class="btn btn--ghost" data-open-modal>Записаться</button>
+    </div>
+
+    <button class="burger" aria-label="Открыть меню" aria-expanded="false" data-burger>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <!-- Mobile menu -->
+  <div class="mobile" data-mobile aria-hidden="true">
+    <div class="mobile__panel">
+      <div class="mobile__head">
+        <div class="mobile__title">Меню</div>
+        <button class="btn btn--ghost" data-close-mobile>Закрыть</button>
+      </div>
+      <div class="mobile__links">
+        <a href="#about" data-mobile-link>О нас</a>
+        <a href="#services" data-mobile-link>Услуги</a>
+        <a href="#advantages" data-mobile-link>Преимущества</a>
+        <a href="#pricing" data-mobile-link>Цены</a>
+        <a href="#contact" data-mobile-link>Контакты</a>
+        <button class="btn" data-open-modal>Записаться</button>
+      </div>
+    </div>
+    <div class="mobile__backdrop" data-close-mobile></div>
+  </div>
+
+  <!-- Hero -->
+  <main id="top" class="hero">
+    <div class="hero__bg" aria-hidden="true">
+      <div class="glow glow--a"></div>
+      <div class="glow glow--b"></div>
+      <div class="grain"></div>
+    </div>
+
+    <div class="hero__content">
+      <p class="kicker">ПРЕМИАЛЬНЫЙ АВТОСЕРВИС · ДИАГНОСТИКА · РЕМОНТ · ОБСЛУЖИВАНИЕ</p>
+
+      <h1 class="h1">
+        Точность.
+        <span class="muted">Спокойствие.</span>
+        Результат.
+      </h1>
+
+      <p class="lead">
+        Мы обслуживаем автомобили так, будто это наша личная машина:
+        прозрачно, аккуратно и без сюрпризов.
+      </p>
+
+      <div class="hero__cta">
+        <button class="btn" data-open-modal>Записаться онлайн</button>
+        <a class="btn btn--ghost" href="#services">Смотреть услуги</a>
+      </div>
+
+      <div class="hero__bar">
+        <div class="pill">
+          <span class="dot"></span> Приём сегодня: <b id="todaySchedule">09:00–20:00</b>
+        </div>
+        <div class="pill">
+          Время сейчас: <b id="localTime">--:--</b>
+        </div>
+        <div class="pill">
+          <b>Гарантия</b> на работы и запчасти
+        </div>
+      </div>
+    </div>
+
+    <div class="scrollhint">
+      <span>Листай вниз</span>
+      <div class="scrollhint__line"></div>
+    </div>
+  </main>
+
+  <!-- About -->
+  <section id="about" class="section section--light">
+    <div class="wrap grid2">
+      <div class="reveal">
+        <h2 class="h2">О нас</h2>
+        <p class="copy">
+          Мы — сервис, где важны детали: грамотная диагностика, аккуратный ремонт и понятная коммуникация.
+          Никаких “поменяем на всякий случай”. Только то, что нужно — и с доказательствами.
+        </p>
+
+        <div class="cards">
+          <article class="card reveal">
+            <h3>Честная диагностика</h3>
+            <p>Фото/видео подтверждение и объяснение простыми словами.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Сроки и контроль</h3>
+            <p>Согласование этапов, контроль качества перед выдачей.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Технологичное обслуживание</h3>
+            <p>Сканеры, инструмент, моментные ключи, регламенты.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Комфорт клиента</h3>
+            <p>Запись онлайн, напоминания, приём без очередей.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="media reveal">
+        <div class="frame frame--tall">
+          <div class="frame__shine"></div>
+          <div class="frame__content">
+            <div class="metric">
+              <div class="metric__num">2005</div>
+              <div class="metric__label">год запуска</div>
+            </div>
+            <div class="metric">
+              <div class="metric__num">5 000+</div>
+              <div class="metric__label">клиентов в базе</div>
+            </div>
+            <div class="metric">
+              <div class="metric__num">48 ч</div>
+              <div class="metric__label">средний цикл ремонта</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="badge">
+          <div class="badge__big">Nord Garage</div>
+          <div class="badge__small">ремонт · сервис · детали</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="section section--dark">
+    <div class="wrap">
+      <div class="section__head reveal">
+        <h2 class="h2">Услуги</h2>
+        <p class="copy">Лаконично и по делу: выбирай направление — остальное мы уточним при записи.</p>
+      </div>
+
+      <div class="tiles">
+        <a class="tile reveal" href="#contact">
+          <div class="tile__title">Диагностика</div>
+          <div class="tile__desc">Компьютерная, ходовая, утечки, тест-драйв.</div>
+          <div class="tile__meta">от 1 500 ₽</div>
+        </a>
+        <a class="tile reveal" href="#contact">
+          <div class="tile__title">ТО по регламенту</div>
+          <div class="tile__desc">Масло, фильтры, свечи, жидкости, осмотр.</div>
+          <div class="tile__meta">от 3 500 ₽</div>
+        </a>
+        <a class="tile reveal" href="#contact">
+          <div class="tile__title">Подвеска и тормоза</div>
+          <div class="tile__desc">Сайлентблоки, рычаги, диски/колодки.</div>
+          <div class="tile__meta">по смете</div>
+        </a>
+        <a class="tile reveal" href="#contact">
+          <div class="tile__title">Двигатель</div>
+          <div class="tile__desc">Утечки, ГРМ, турбо, ремонт узлов.</div>
+          <div class="tile__meta">по смете</div>
+        </a>
+        <a class="tile reveal" href="#contact">
+          <div class="tile__title">Электрика</div>
+          <div class="tile__desc">Проводка, датчики, зарядка, CAN-диагностика.</div>
+          <div class="tile__meta">от 2 000 ₽</div>
+        </a>
+        <a class="tile reveal" href="#contact">
+          <div class="tile__title">Подбор запчастей</div>
+          <div class="tile__desc">Оригинал/аналог, сроки, гарантии, логистика.</div>
+          <div class="tile__meta">сегодня</div>
+        </a>
+      </div>
+
+      <div class="cta reveal">
+        <div class="cta__text">
+          <h3 class="h3">Запись за 30 секунд</h3>
+          <p class="copy">Оставь контакты — мы уточним марку/модель и симптомы.</p>
+        </div>
+        <button class="btn" data-open-modal>Оставить заявку</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Advantages -->
+  <section id="advantages" class="section section--light">
+    <div class="wrap">
+      <div class="section__head reveal">
+        <h2 class="h2">Преимущества</h2>
+        <p class="copy">Премиум — это не “дорого”, а “понятно и качественно”.</p>
+      </div>
+
+      <div class="adv">
+        <article class="adv__item reveal">
+          <h3>Фото-отчёт</h3>
+          <p>Показываем, что именно делаем и почему.</p>
+        </article>
+        <article class="adv__item reveal">
+          <h3>Контроль моментов</h3>
+          <p>Регламент, моменты затяжки, чек-лист выдачи.</p>
+        </article>
+        <article class="adv__item reveal">
+          <h3>Прозрачная смета</h3>
+          <p>Согласование перед работами, без “вдруг”.</p>
+        </article>
+        <article class="adv__item reveal">
+          <h3>Скорость</h3>
+          <p>Склад и поставки: ремонт без лишних ожиданий.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="section section--dark">
+    <div class="wrap">
+      <div class="section__head reveal">
+        <h2 class="h2">Цены</h2>
+        <p class="copy">Стартовые ориентиры. Финальная стоимость — после диагностики/осмотра.</p>
+      </div>
+
+      <div class="pricing">
+        <article class="pricecard reveal">
+          <div class="pricecard__top">
+            <div class="tag">Быстро</div>
+            <h3 class="h3">Диагностика</h3>
+            <p class="copy">Сканер + базовый осмотр + рекомендации.</p>
+          </div>
+          <div class="price">1 500 ₽</div>
+          <ul class="list">
+            <li>Считывание ошибок</li>
+            <li>Осмотр узлов</li>
+            <li>План работ</li>
+          </ul>
+          <button class="btn btn--ghost" data-open-modal>Записаться</button>
+        </article>
+
+        <article class="pricecard pricecard--accent reveal">
+          <div class="pricecard__top">
+            <div class="tag tag--accent">Популярно</div>
+            <h3 class="h3">ТО</h3>
+            <p class="copy">Замена масла/фильтров и чек-лист состояния.</p>
+          </div>
+          <div class="price">3 500 ₽</div>
+          <ul class="list">
+            <li>Расходники по выбору</li>
+            <li>Проверка утечек</li>
+            <li>Рекомендации</li>
+          </ul>
+          <button class="btn" data-open-modal>Записаться</button>
+        </article>
+
+        <article class="pricecard reveal">
+          <div class="pricecard__top">
+            <div class="tag">По смете</div>
+            <h3 class="h3">Ремонт</h3>
+            <p class="copy">Подвеска, тормоза, двигатель, электрика.</p>
+          </div>
+          <div class="price">—</div>
+          <ul class="list">
+            <li>Согласование этапов</li>
+            <li>Фото-отчёт</li>
+            <li>Гарантия</li>
+          </ul>
+          <button class="btn btn--ghost" data-open-modal>Обсудить</button>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section section--light">
+    <div class="wrap grid2">
+      <div class="reveal">
+        <h2 class="h2">Контакты</h2>
+        <p class="copy">
+          Укажи город/адрес, часы работы и способы связи.
+          Можно добавить карту — скажешь, какой сервис (Google/Yandex).
+        </p>
+
+        <div class="contact">
+          <div class="contact__row">
+            <div class="contact__label">Адрес</div>
+            <div class="contact__value">г. Ваш город, ул. Примерная, 10</div>
+          </div>
+          <div class="contact__row">
+            <div class="contact__label">Телефон</div>
+            <div class="contact__value"><a class="link" href="tel:+70000000000">+7 (000) 000-00-00</a></div>
+          </div>
+          <div class="contact__row">
+            <div class="contact__label">Часы</div>
+            <div class="contact__value">Пн–Сб 09:00–20:00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="formcard">
+          <h3 class="h3">Быстрая заявка</h3>
+          <p class="copy">Мы свяжемся и уточним детали: марка, пробег, симптомы.</p>
+
+          <form class="form" id="contactForm">
+            <label>
+              Имя
+              <input name="name" required placeholder="Как к вам обращаться?" />
+            </label>
+            <label>
+              Телефон
+              <input name="phone" inputmode="tel" placeholder="+7..." />
+            </label>
+            <label>
+              Что нужно сделать?
+              <input name="issue" placeholder="ТО / диагностика / тормоза..." />
+            </label>
+            <button class="btn" type="submit">Отправить</button>
+            <p class="fineprint">Нажимая “Отправить”, вы соглашаетесь с обработкой данных.</p>
+            <p class="success" id="contactSuccess" hidden>Заявка отправлена. Мы напишем/позвоним в ближайшее время.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="wrap footer__row">
+      <div>© <span id="year"></span> Nord Garage</div>
+      <div class="footer__right">
+        <a class="link" href="#top">Наверх</a>
+        <button class="btn btn--ghost" data-open-modal>Записаться</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal__backdrop" data-close-modal></div>
+
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-label="Запись в сервис">
+      <div class="modal__head">
+        <h3 class="h3">Запись в сервис</h3>
+        <button class="btn btn--ghost" data-close-modal>Закрыть</button>
+      </div>
+
+      <form class="form" id="bookingForm">
+        <label>
+          Имя
+          <input name="name" required />
+        </label>
+
+        <label>
+          Телефон
+          <input name="phone" inputmode="tel" placeholder="+7..." />
+        </label>
+
+        <label>
+          Автомобиль
+          <input name="car" placeholder="Марка / модель / год" />
+        </label>
+
+        <label>
+          Запрос
+          <input name="request" placeholder="ТО / диагностика / ремонт..." />
+        </label>
+
+        <div class="form__row">
+          <label>
+            Дата
+            <input name="date" type="date" />
+          </label>
+          <label>
+            Время
+            <input name="time" type="time" />
+          </label>
+        </div>
+
+        <button class="btn" type="submit">Отправить заявку</button>
+
+        <p class="fineprint">Пока это демо-форма (без отправки на сервер). Подключим Telegram/Email за 10 минут.</p>
+        <p class="success" id="bookingSuccess" hidden>Готово! Мы получили заявку и скоро свяжемся.</p>
+      </form>
+    </div>
+  </div>
+
+  <div class="progress" aria-hidden="true">
+    <div class="progress__bar" id="progressBar"></div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
