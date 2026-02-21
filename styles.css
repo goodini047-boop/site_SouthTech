@@ -319,7 +319,7 @@ button{font-family:inherit}
 .logoHero{
   position:absolute;
   left: var(--logo-x);
-  top: var(--logo-y);
+  top: calc(var(--logo-y) + 140px); /* ← 60px опускает логотип ниже */
   width: var(--logo-w);
   margin:0;
   padding:0;
