@@ -25,6 +25,7 @@
 html{
   scroll-behavior:smooth;
   scroll-padding-top: var(--header-offset);
+  scroll-snap-type: y mandatory;
 }
 body{
   margin:0;
@@ -223,6 +224,8 @@ button{font-family:inherit}
   overflow:hidden;
   background: var(--bg);
   color: var(--fg);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 
   /* Logo positioning (single source of truth) */
   --logo-pad: clamp(200px, 20vw, 320px);
@@ -304,7 +307,7 @@ button{font-family:inherit}
 
 .heroGrid{
   display:grid;
-  grid-template-columns: 1.2fr .8fr;
+  grid-template-columns: minmax(0, 640px);
   gap: 18px;
   align-items: start;
 }
@@ -312,8 +315,6 @@ button{font-family:inherit}
 
 /* reserve space for logo in left column */
 .heroGrid > :first-child{ position: relative; padding-top: var(--logo-pad); }
-.heroGrid > :nth-child(2){ padding-top: var(--logo-pad); }
-@media (max-width: 980px){ .heroGrid > :nth-child(2){ padding-top: 0; } }
 
 /* Logo */
 .logoHero{
@@ -391,33 +392,26 @@ button{font-family:inherit}
 }
 .heroCar{
   position:absolute;
-  right: -300px;
-  top: -250px;
-  width: clamp(650px, 65vw, 1100px);
+  right: 0px;
+  bottom: 0px;
+  top: auto;
+  width: clamp(460px, 46vw, 820px);
   height:auto;
   opacity: 0;
-  filter:
-    blur(6px)
-    saturate(0.98)
-    contrast(0.98)
-    drop-shadow(0 40px 90px rgba(0,0,0,.35));
-  transition: opacity 1.2s ease, filter 1.4s ease;
+  filter: drop-shadow(0 40px 90px rgba(0,0,0,.40));
+  transition: opacity 1.2s ease;
   pointer-events:none;
 }
 @media (max-width: 1100px){
-  .heroCar{ right: -220px; top: -210px; width: clamp(560px, 70vw, 980px); }
+  .heroCar{ right: -40px; width: clamp(400px, 52vw, 700px); }
   .heroCarShadow{ right: -70px; top: 240px; }
 }
 @media (max-width: 720px){
   .heroCar{
-    right: -30px;
-    top: 20px;
-    width: clamp(340px, 88vw, 520px);
-    filter:
-      blur(8px)
-      saturate(0.98)
-      contrast(0.98)
-      drop-shadow(0 24px 60px rgba(0,0,0,.34));
+    right: -10px;
+    bottom: 0px;
+    width: clamp(300px, 78vw, 460px);
+    filter: drop-shadow(0 24px 60px rgba(0,0,0,.34));
   }
   .heroCarShadow{
     right: 10px;
@@ -427,7 +421,7 @@ button{font-family:inherit}
     filter: blur(18px);
   }
 }
-.hero.is-ready .heroCar{ opacity: 1; filter: blur(5px) saturate(1) contrast(1) drop-shadow(0 40px 90px rgba(0,0,0,.35)); }
+.hero.is-ready .heroCar{ opacity: 1; filter: drop-shadow(0 40px 90px rgba(0,0,0,.40)); }
 .hero.is-ready .heroCarShadow{ opacity: .75; }
 
 /* Scroll hint */
@@ -451,82 +445,55 @@ button{font-family:inherit}
 }
 
 /* Sections */
-.section{padding: 82px 0}
+.section{
+  padding: 82px 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .section--dark{background: linear-gradient(180deg, var(--bg2), var(--bg)); color: var(--fg)}
 .section--light{background: #fff; color:#111}
 
-/* Scan section */
+/* =============================================
+   Scan section — полноэкранная сцена
+   ============================================= */
 .section--scan{
-  background: linear-gradient(180deg,
-    #0b0b0c 0px,
-    #0b0b0c 72px,
-    #ffffff 72px,
-    #ffffff 100%
-  );
-  padding-top: 130px;
-}
-.scanSplit{
-  display:grid;
-  grid-template-columns: 520px 1fr;
-  gap: 26px;
-  align-items: start;
-}
-@media (max-width: 980px){
-  .scanSplit{grid-template-columns:1fr}
-}
-
-.scanStage{ position: sticky; top: calc(92px + var(--safe-top)); }
-@media (max-width: 980px){
-  .scanStage{ position: relative; top: auto; }
-}
-
-.scanFrame{
   position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1.15;
-  border-radius: 26px;
+  background: #fff;
+  padding: 0;
   overflow: hidden;
-  border: 1px solid rgba(0,0,0,.10);
-  background: #f7f7f8;
-  box-shadow: 0 22px 80px rgba(0,0,0,.22);
-}
-@media (max-width: 980px){
-  .scanFrame{ max-width: 560px; margin: 0 auto; aspect-ratio: 1 / 1.08; }
-}
-@media (max-width: 520px){
-  .scanFrame{ aspect-ratio: 1 / 1.12; }
+  /* min-height: 100vh — уже задан через .section */
 }
 
-.scanBg{
-  position:absolute; inset:0;
-  background:
-    radial-gradient(900px 700px at 50% 35%, rgba(0,0,0,.04), transparent 55%),
-    linear-gradient(180deg, rgba(255,255,255,1), rgba(250,250,251,1));
-}
-.scanEdge{ position:absolute; left:-10%; right:-10%; height: 70px; pointer-events:none; }
-.scanEdge--top{
-  top:-20px;
-  background: radial-gradient(closest-side at 50% 120%, rgba(0,0,0,.10), transparent 70%);
-  opacity:.16;
-}
-.scanEdge--bottom{
-  bottom:-22px;
-  background: radial-gradient(closest-side at 50% -20%, rgba(0,0,0,.10), transparent 70%);
-  opacity:.10;
+/* Сцена занимает ВЕСЬ блок */
+.scanStage{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
+/* Машина и чертёж — абсолютно по центру */
 .scanCar,
 .scanBlueprint{
-  position:absolute;
+  position: absolute;
   left: 50%;
   top: 50%;
-  width: min(380px, 82%);
+  width: clamp(300px, 46vw, 680px);
   height: auto;
+  pointer-events: none;
 }
+@media (max-width: 768px){
+  .scanCar, .scanBlueprint{ width: clamp(240px, 72vw, 400px); }
+}
+
 .scanCar{
-  transform: translate(-50%, 140%);
+  transform: translate(-50%, 160%);
   opacity: 1;
-  filter: drop-shadow(0 14px 28px rgba(0,0,0,.18));
+  filter: drop-shadow(0 24px 60px rgba(0,0,0,.20));
   will-change: transform, opacity, filter;
 }
 .scanBlueprint{
@@ -534,69 +501,163 @@ button{font-family:inherit}
   opacity: 0;
   clip-path: inset(100% 0 0 0);
   will-change: opacity, clip-path;
-  filter: drop-shadow(0 10px 22px rgba(0,0,0,.08)) saturate(1.05);
+  filter: drop-shadow(0 10px 30px rgba(0,0,0,.10)) saturate(1.05);
 }
 
-.scanGrid{
-  position:absolute; inset:0;
-  opacity: 0;
-  background:
-    linear-gradient(rgba(0, 140, 255, 0.09) 1px, transparent 1px) 0 0/28px 28px,
-    linear-gradient(90deg, rgba(0, 140, 255, 0.07) 1px, transparent 1px) 0 0/28px 28px;
-  mix-blend-mode: multiply;
-}
+/* Сканирующая полоса */
 .scanBeam{
-  position:absolute;
+  position: absolute;
   left: 0; right: 0;
-  height: 140px;
+  height: 160px;
   top: 112%;
   opacity: 0;
-  background:
-    linear-gradient(180deg,
-      rgba(0,0,0,0) 0%,
-      rgba(0,140,255,.08) 25%,
-      rgba(0,140,255,.22) 50%,
-      rgba(0,140,255,.08) 75%,
-      rgba(0,0,0,0) 100%);
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(0,140,255,.06) 25%,
+    rgba(0,140,255,.18) 50%,
+    rgba(0,140,255,.06) 75%,
+    transparent 100%);
   mix-blend-mode: multiply;
-  box-shadow: 0 0 0 1px rgba(0,140,255,.12) inset;
   will-change: top, opacity;
+  pointer-events: none;
 }
-.scanHUD{
-  position:absolute; inset:0;
+
+/* Сетка */
+.scanGrid{
+  position: absolute; inset: 0;
   opacity: 0;
-  pointer-events:none;
+  background:
+    linear-gradient(rgba(0,140,255,.06) 1px, transparent 1px) 0 0 / 36px 36px,
+    linear-gradient(90deg, rgba(0,140,255,.05) 1px, transparent 1px) 0 0 / 36px 36px;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* HUD */
+.scanHUD{
+  position: absolute; inset: 0;
+  opacity: 0;
+  pointer-events: none;
   will-change: opacity;
 }
 .hudCircle{
-  position:absolute;
+  position: absolute;
   border-radius: 50%;
-  border: 1px solid rgba(0,140,255,.32);
-  box-shadow: 0 0 0 10px rgba(0,140,255,.05);
+  border: 1px solid rgba(0,140,255,.24);
+  box-shadow: 0 0 0 10px rgba(0,140,255,.03);
 }
-.hudCircle.c1{ left: 10%; top: 14%; width: 92px; height: 92px; }
-.hudCircle.c2{ right: 8%; bottom: 16%; width: 130px; height: 130px; }
+.hudCircle.c1{ left: 18%; top: 20%; width: 80px; height: 80px; }
+.hudCircle.c2{ right: 16%; bottom: 22%; width: 110px; height: 110px; }
 .hudLine{
-  position:absolute; height: 1px;
-  background: rgba(0,140,255,.36);
-  box-shadow: 0 0 0 6px rgba(0,140,255,.04);
+  position: absolute; height: 1px;
+  background: rgba(0,140,255,.26);
 }
-.hudLine.l1{ left: 12%; right: 18%; top: 48%; }
-.hudLine.l2{ left: 18%; right: 12%; top: 60%; opacity:.7; }
+.hudLine.l1{ left: 20%; right: 22%; top: 46%; }
+.hudLine.l2{ left: 22%; right: 20%; top: 58%; opacity:.6; }
 
-.scanText{ padding-top: 12px; }
-.scanCards{ display:grid; gap: 10px; margin-top: 14px; }
+/* ── Растворение краёв в белый — все 4 стороны ── */
+.scanFade{
+  position: absolute;
+  pointer-events: none;
+  z-index: 4;
+}
+.scanFade--top{
+  inset: 0 0 auto 0;
+  height: 32%;
+  background: linear-gradient(180deg,
+    #ffffff 0%,
+    rgba(255,255,255,.80) 40%,
+    transparent 100%);
+}
+.scanFade--bottom{
+  inset: auto 0 0 0;
+  height: 32%;
+  background: linear-gradient(0deg,
+    #ffffff 0%,
+    rgba(255,255,255,.80) 40%,
+    transparent 100%);
+}
+.scanFade--left{
+  inset: 0 auto 0 0;
+  width: 24%;
+  background: linear-gradient(90deg,
+    #ffffff 0%,
+    rgba(255,255,255,.80) 45%,
+    transparent 100%);
+}
+.scanFade--right{
+  inset: 0 0 0 auto;
+  width: 24%;
+  background: linear-gradient(270deg,
+    #ffffff 0%,
+    rgba(255,255,255,.80) 45%,
+    transparent 100%);
+}
+
+/* ── Текстовые метки по 4 углам, поверх fade ── */
+.scanLabel{
+  position: absolute;
+  z-index: 8;
+  max-width: 210px;
+}
+.scanLabel--tl{ top: 12%;  left:  5%; }
+.scanLabel--tr{ top: 12%;  right: 5%; text-align: right; }
+.scanLabel--bl{ bottom: 16%; left:  5%; }
+.scanLabel--br{ bottom: 16%; right: 5%; text-align: right; }
+
+.scanLabel__head{
+  font-weight: 900;
+  font-size: 15px;
+  color: #111;
+  margin-bottom: 5px;
+}
+.scanLabel__body{
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(17,17,17,.55);
+  margin: 0;
+}
+
+/* CTA — закреплено в центре внизу, поверх stage */
+.scanCta{
+  position: absolute;
+  bottom: 7%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  pointer-events: auto;
+  white-space: nowrap;
+}
+
+/* Мобильные */
+@media (max-width: 640px){
+  .scanLabel{ max-width: 130px; }
+  .scanLabel__body{ display: none; }
+  .scanLabel__head{ font-size: 12px; }
+  .scanLabel--tl{ top: 10%; left: 3%; }
+  .scanLabel--tr{ top: 10%; right: 3%; }
+  .scanLabel--bl{ bottom: 20%; left: 3%; }
+  .scanLabel--br{ bottom: 20%; right: 3%; }
+}
+
+/* infoCard — используется в других местах */
 .infoCard{
   border-radius: 20px;
   border: 1px solid rgba(0,0,0,.10);
-  background: rgba(255,255,255,.75);
-  box-shadow: 0 18px 60px rgba(0,0,0,.08);
+  background: rgba(255,255,255,.80);
+  box-shadow: 0 12px 40px rgba(0,0,0,.07);
   padding: 14px;
 }
-.infoCard__t{font-weight:900}
-.infoCard__d{margin-top:6px; opacity:.75; line-height:1.6}
-.scanCta{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 16px; }
+.infoCard__t{ font-weight: 900; }
+.infoCard__d{ margin-top: 6px; opacity: .72; line-height: 1.6; }
+
 .section__head{margin-bottom: 10px}
+
+
 
 /* Services tiles */
 .tiles{
@@ -711,8 +772,10 @@ button{font-family:inherit}
   .contactArt{ width: min(520px, 100%); transform: none; }
 }
 
-/* Footer */
+/* Footer snap */
 .footer{
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
   background: var(--bg);
   color: rgba(255,255,255,.80);
   border-top: 1px solid rgba(255,255,255,.10);
@@ -764,7 +827,7 @@ button{font-family:inherit}
   html{scroll-behavior:auto}
   .hero-anim{transition:none; opacity:1; transform:none; filter:none}
   .reveal{transition:none; opacity:1; transform:none}
-  .heroCar{transition:none; opacity:1; filter:none}
+  .heroCar{transition:none; opacity:1; filter:drop-shadow(0 40px 90px rgba(0,0,0,.40))}
   .heroCarShadow{transition:none; opacity:.6}
 }
 
@@ -807,8 +870,7 @@ button{font-family:inherit}
   }
 
   /* Cards / tiles / blocks */
-  .section{ padding: 60px 0; }
-  .section--scan{ padding-top: 105px; }
+  .section{ padding: 0; }
   #contact.section{ padding: 60px 0 92px; }
 
   .heroCard{ padding: 14px; border-radius: 18px; }
@@ -818,15 +880,9 @@ button{font-family:inherit}
   .contact{ padding: 12px; border-radius: 18px; }
 
   .tiles{ gap: 10px; }
-  .scanCards{ gap: 10px; }
 
   /* Buttons — чуть компактнее */
   .btn{ padding: 9px 12px; min-height: 42px; }
-
-  /* Scan module — чуть меньше визуально */
-  .scanFrame{ border-radius: 22px; }
-  .scanCar, .scanBlueprint{ width: min(340px, 84%); }
-  .scanBeam{ height: 120px; }
 
   /* Contact map — чуть ниже, чтобы блок не «раздувался» */
   .contactMap iframe{ height: 280px; }
@@ -854,23 +910,7 @@ button{font-family:inherit}
 .hero{ align-items:flex-start; }
 .hero__content{ padding-bottom: 46px; }
 
-/* убираем большой тёмный пояс перед белым блоком */
-.section--scan{
-  position: relative;
-  background: #fff;
-  padding-top: 82px;
-  overflow: hidden;
-  margin-top: -1px;
-}
-.section--scan::before{
-  content:"";
-  position:absolute;
-  left:0; right:0;
-  top:-80px;
-  height:80px;
-  pointer-events:none;
-  background: linear-gradient(180deg, rgba(11,11,12,0) 0%, #ffffff 100%);
-}
+/* убираем большой тёмный пояс перед белым блоком — уже handled в section--scan */
 
 /* 2) Услуги — телефон: 2 колонки */
 @media (max-width: 620px){

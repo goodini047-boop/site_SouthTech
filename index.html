@@ -79,29 +79,25 @@
             <img src="assets/logo-yug.png" alt="" />
           </div>
 
-          <p class="kicker hero-anim hero-anim--2">ПРЕМИАЛЬНЫЙ СЕРВИС · ДИАГНОСТИКА · РЕМОНТ · ОБСЛУЖИВАНИЕ</p>
-
-          <h1 class="h1 hero-anim hero-anim--3">
+          <h1 class="h1 hero-anim hero-anim--2">
             Точно. Быстро. Честно.
             <span class="h1__muted">Без лишних замен.</span>
           </h1>
 
-          <p class="lead hero-anim hero-anim--4">
-            Согласуем смету до начала работ, покажем причины, дадим гарантию.
-            Аккуратно и прозрачно — как для себя.
-          </p>
-
-          <div class="hero__cta hero-anim hero-anim--5">
+          <div class="hero__cta hero-anim hero-anim--3">
             <a class="btn" href="tel:+79088237342">Записаться</a>
             <a class="btn btn--ghost" href="#scan">Посмотреть диагностику</a>
           </div>
 
-          <div class="hero__bar hero-anim hero-anim--6">
+          <div class="hero__bar hero-anim hero-anim--4">
             <div class="pill pill--dark">
-              <span class="dot"></span> Приём сегодня: <b id="todaySchedule">09:00–20:00</b>
+              <span class="dot"></span> Приём сегодня: <b id="todaySchedule">10:00–19:00</b>
             </div>
             <div class="pill pill--dark">
               Время сейчас: <b id="localTime">--:--</b>
+            </div>
+            <div class="pill pill--dark">
+              <b>20 лет</b> опыта
             </div>
             <div class="pill pill--dark">
               <b>Гарантия</b> на работы и запчасти
@@ -109,18 +105,6 @@
           </div>
         </div>
 
-        <div class="heroAside hero-anim hero-anim--4">
-          <div class="heroCard">
-            <div class="heroCard__title">Что вы получите</div>
-            <ul class="heroList">
-              <li><span class="bullet"></span>Понятное объяснение причин</li>
-              <li><span class="bullet"></span>Фото/видео по ключевым моментам</li>
-              <li><span class="bullet"></span>Смета до начала работ</li>
-              <li><span class="bullet"></span>Гарантия и контроль качества</li>
-            </ul>
-            <div class="heroCard__hint">Листай вниз — покажем “сканирование → чертёж”.</div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -131,62 +115,60 @@
   </main>
 
   <!-- Диагностика + скан -->
+  <!-- Диагностика + скан -->
   <section id="scan" class="section section--scan">
-    <div class="wrap scanSplit">
-      <aside class="scanCol">
-        <div class="scanStage" id="scanStage">
-          <div class="scanFrame">
-            <div class="scanBg"></div>
 
-            <img class="scanCar" id="scanCar" src="assets/bmw_render.png" alt="" aria-hidden="true" />
-            <img class="scanBlueprint" id="scanBlueprint" src="assets/bmw_blueprint.png" alt="" aria-hidden="true" />
+    <!-- Полноэкранная сцена без рамок -->
+    <div class="scanStage" id="scanStage">
 
-            <div class="scanGrid" id="scanGrid" aria-hidden="true"></div>
-            <div class="scanBeam" id="scanBeam" aria-hidden="true"></div>
+      <!-- Машина и чертёж — в центре сцены -->
+      <img class="scanCar"       id="scanCar"       src="assets/bmw_render.png"    alt="" aria-hidden="true" />
+      <img class="scanBlueprint" id="scanBlueprint" src="assets/bmw_blueprint.png" alt="" aria-hidden="true" />
 
-            <div class="scanHUD" id="scanHUD" aria-hidden="true">
-              <span class="hudCircle c1"></span>
-              <span class="hudCircle c2"></span>
-              <span class="hudLine l1"></span>
-              <span class="hudLine l2"></span>
-            </div>
+      <div class="scanGrid" id="scanGrid" aria-hidden="true"></div>
+      <div class="scanBeam" id="scanBeam" aria-hidden="true"></div>
 
-            <div class="scanEdge scanEdge--top" aria-hidden="true"></div>
-            <div class="scanEdge scanEdge--bottom" aria-hidden="true"></div>
-          </div>
-        </div>
-      </aside>
+      <div class="scanHUD" id="scanHUD" aria-hidden="true">
+        <span class="hudCircle c1"></span>
+        <span class="hudCircle c2"></span>
+        <span class="hudLine l1"></span>
+        <span class="hudLine l2"></span>
+      </div>
 
-      <div class="scanText">
-        <div class="section__head reveal slow">
-          <h2 class="h2">Диагностика</h2>
-          <p class="copy">
-            Мы не “угадываем”. Сначала данные → затем вывод → затем решение.
-            Вы видите логику ремонта и понимаете, за что платите.
-          </p>
-        </div>
+      <!-- Растворение краёв в белый фон -->
+      <div class="scanFade scanFade--top"    aria-hidden="true"></div>
+      <div class="scanFade scanFade--bottom" aria-hidden="true"></div>
+      <div class="scanFade scanFade--left"   aria-hidden="true"></div>
+      <div class="scanFade scanFade--right"  aria-hidden="true"></div>
 
-        <div class="scanCards">
-          <div class="infoCard reveal slow">
-            <div class="infoCard__t">Сканер и параметры</div>
-            <div class="infoCard__d">Ошибки, live data, тесты исполнительных механизмов.</div>
-          </div>
-          <div class="infoCard reveal slow">
-            <div class="infoCard__t">Проверка по симптомам</div>
-            <div class="infoCard__d">Тест-драйв, измерения, визуальный осмотр.</div>
-          </div>
-          <div class="infoCard reveal slow">
-            <div class="infoCard__t">Объяснение простыми словами</div>
-            <div class="infoCard__d">Почему именно это? Что будет, если отложить?</div>
-          </div>
-        </div>
+      <!-- Текст по углам -->
+      <div class="scanLabel scanLabel--tl reveal slow">
+        <div class="scanLabel__head">Диагностика</div>
+        <p class="scanLabel__body">Сначала данные&nbsp;&mdash; затем вывод&nbsp;&mdash; затем решение.</p>
+      </div>
 
-        <div class="scanCta reveal slow">
-          <a class="btn" href="tel:+79088237342">Записаться</a>
-          <a class="btn btn--ghost darkGhost" href="#services">Перейти к услугам</a>
-        </div>
+      <div class="scanLabel scanLabel--tr reveal slow">
+        <div class="scanLabel__head">Сканер и параметры</div>
+        <p class="scanLabel__body">Ошибки, live&nbsp;data, тесты исполнительных механизмов.</p>
+      </div>
+
+      <div class="scanLabel scanLabel--bl reveal slow">
+        <div class="scanLabel__head">Проверка симптомов</div>
+        <p class="scanLabel__body">Тест-драйв, измерения, визуальный осмотр.</p>
+      </div>
+
+      <div class="scanLabel scanLabel--br reveal slow">
+        <div class="scanLabel__head">Простые слова</div>
+        <p class="scanLabel__body">Почему именно это? Что будет, если отложить?</p>
       </div>
     </div>
+
+    <!-- CTA под сценой -->
+    <div class="wrap scanCta reveal slow">
+      <a class="btn" href="tel:+79088237342">Записаться</a>
+      <a class="btn btn--ghost darkGhost" href="#services">Перейти к услугам</a>
+    </div>
+
   </section>
 
   <!-- SERVICES -->

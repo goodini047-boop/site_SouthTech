@@ -154,7 +154,7 @@ window.addEventListener("load", () => {
 });
 
 // ===========================
-// Section "scan" animation (rAF throttled)
+// Section "scan" animation (auto-plays when section enters viewport)
 // ===========================
 (() => {
   const section = document.getElementById("scan");
@@ -171,24 +171,16 @@ window.addEventListener("load", () => {
   const easeOut = (t) => 1 - Math.pow(1 - t, 3);
   const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
-  function render() {
-    const rect = section.getBoundingClientRect();
-    const vh = window.innerHeight || 1;
+  const DURATION = 5000; // ms — длительность анимации
 
-    const start = vh * 0.9;
-    const end = -vh * 0.2;
-    const raw = (start - rect.top) / (start - end);
-    const p = clamp01(raw);
-
+  function applyState(p) {
     const pEnter = easeOut(clamp01(p / 0.28));
-
     const revealStart = 0.18;
     const revealEnd = 0.52;
     const pReveal = easeInOut(clamp01((p - revealStart) / (revealEnd - revealStart)));
 
     const yCar = lerp(165, -50, pEnter);
     car.style.transform = `translate(-50%, ${yCar}%)`;
-
     car.style.opacity = String(lerp(1, 0, pReveal));
 
     const shA = lerp(0.18, 0.05, pReveal);
@@ -209,26 +201,30 @@ window.addEventListener("load", () => {
   }
 
   if (prefersReducedMotion) {
-    // show final state immediately
-    car.style.opacity = "0";
-    blueprint.style.opacity = "1";
-    blueprint.style.clipPath = "inset(0 0 0 0)";
-    beam.style.opacity = "1";
-    if (grid) grid.style.opacity = "0.55";
-    if (hud) hud.style.opacity = "0.7";
+    applyState(1);
     return;
   }
 
-  let raf = 0;
-  const schedule = () => {
-    if (raf) return;
-    raf = requestAnimationFrame(() => {
-      raf = 0;
-      render();
-    });
-  };
+  let started = false;
+  let startTime = null;
 
-  render();
-  window.addEventListener("scroll", schedule, { passive: true });
-  window.addEventListener("resize", schedule);
+  function animate(ts) {
+    if (!startTime) startTime = ts;
+    const p = clamp01((ts - startTime) / DURATION);
+    applyState(p);
+    if (p < 1) requestAnimationFrame(animate);
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((e) => {
+      if (e.isIntersecting && !started) {
+        started = true;
+        io.disconnect();
+        requestAnimationFrame(animate);
+      }
+    }),
+    { threshold: 0.25 }
+  );
+
+  io.observe(section);
 })();
