@@ -10,6 +10,12 @@
 </head>
 
 <body>
+
+  <!-- ========== Вступительная заставка ========== -->
+  <div id="intro" aria-hidden="true">
+    <img id="introLogo" src="assets/logo-yug.png" alt="" />
+  </div>
+
   <!-- Topbar -->
   <header class="topbar" id="topbar">
     <a class="brand" href="#top" aria-label="На главную">
@@ -58,15 +64,15 @@
   <!-- HERO -->
   <main id="top" class="hero">
     <div class="hero__bg" aria-hidden="true">
-      <div class="carbon"></div>
-      <div class="vignette"></div>
-      <div class="glow glow--red"></div>
-      <div class="glow glow--steel"></div>
-      <div class="grain"></div>
-      <img class="watermark" src="assets/yug_logo_transparent.png" alt="" aria-hidden="true" />
+      <div class="carbon hero-anim hero-anim-bg hero-anim--bg1"></div>
+      <div class="vignette hero-anim hero-anim-bg hero-anim--bg1"></div>
+      <div class="glow glow--red hero-anim hero-anim-bg hero-anim--bg2"></div>
+      <div class="glow glow--steel hero-anim hero-anim-bg hero-anim--bg3"></div>
+      <div class="grain hero-anim hero-anim-bg hero-anim--bg2"></div>
+      <img class="watermark hero-anim hero-anim-bg hero-anim--bg3" src="assets/yug_logo_transparent.png" alt="" aria-hidden="true" />
     </div>
 
-    <!-- Tiguan анимация при старте -->
+    <!-- Tiguan -->
     <div class="heroCarWrap" aria-hidden="true">
       <div class="heroCarShadow"></div>
       <img class="heroCar" id="heroCar" src="assets/tiguan.png" alt="" />
@@ -104,11 +110,16 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
-    <div class="scrollhint" aria-hidden="true">
+    <div class="scrollhint hero-anim hero-anim--5" aria-hidden="true">
+      <span>Листай вниз</span>
+      <div class="scrollhint__line"></div>
+    </div>
+  </main>
+
+    <div class="scrollhint hero-anim hero-anim--5" aria-hidden="true">
       <span>Листай вниз</span>
       <div class="scrollhint__line"></div>
     </div>
@@ -133,6 +144,51 @@
         <span class="hudCircle c2"></span>
         <span class="hudLine l1"></span>
         <span class="hudLine l2"></span>
+      </div>
+
+      <!-- Аннотации узлов: точка на чертеже → линия → текст за пределами -->
+      <div class="scanAnnotations" id="scanAnnotations" aria-hidden="true">
+
+        <!-- Двигатель: точка в нижней части чертежа, линия вправо -->
+        <div class="scanNote scanNote--r scanNote--engine">
+          <span class="scanNote__dot"></span>
+          <span class="scanNote__line"></span>
+          <div class="scanNote__label">
+            <div class="scanNote__title">Двигатель</div>
+            <p class="scanNote__text">ГРМ, турбо, утечки, ремонт узлов — 20&nbsp;лет с любыми проблемами.</p>
+          </div>
+        </div>
+
+        <!-- Подвеска: точка на левом борту, линия влево -->
+        <div class="scanNote scanNote--l scanNote--suspension">
+          <span class="scanNote__dot"></span>
+          <span class="scanNote__line"></span>
+          <div class="scanNote__label">
+            <div class="scanNote__title">Подвеска и тормоза</div>
+            <p class="scanNote__text">Рычаги, сайлентблоки, ступицы, диски — только нужное, без лишних замен.</p>
+          </div>
+        </div>
+
+        <!-- Электрика: точка в районе кабины, линия вправо -->
+        <div class="scanNote scanNote--r scanNote--electrics">
+          <span class="scanNote__dot"></span>
+          <span class="scanNote__line"></span>
+          <div class="scanNote__label">
+            <div class="scanNote__title">Электрика</div>
+            <p class="scanNote__text">Сканер, live&nbsp;data, CAN-шина, датчики — сначала данные, потом вывод.</p>
+          </div>
+        </div>
+
+        <!-- ТО: точка в верхней части (задняя часть авто), линия влево -->
+        <div class="scanNote scanNote--l scanNote--service">
+          <span class="scanNote__dot"></span>
+          <span class="scanNote__line"></span>
+          <div class="scanNote__label">
+            <div class="scanNote__title">ТО по регламенту</div>
+            <p class="scanNote__text">Масло, фильтры, жидкости — строго по нормам завода-изготовителя.</p>
+          </div>
+        </div>
+
       </div>
 
       <!-- Растворение краёв в белый фон -->

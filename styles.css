@@ -26,6 +26,8 @@ html{
   scroll-behavior:smooth;
   scroll-padding-top: var(--header-offset);
   scroll-snap-type: y mandatory;
+  /* Резервируем место под скроллбар — исключает layout-shift при появлении */
+  scrollbar-gutter: stable;
 }
 body{
   margin:0;
@@ -121,7 +123,13 @@ button{font-family:inherit}
   background: rgba(255,255,255,.80);
   border-bottom: 1px solid rgba(0,0,0,.08);
   backdrop-filter: blur(10px);
-  transition: background .28s ease, box-shadow .28s ease, border-color .28s ease;
+  /* Все transitions в одном месте */
+  transform: translateY(-110%);
+  transition: background .28s ease, box-shadow .28s ease, border-color .28s ease,
+              transform 1.44s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.topbar.is-ready{
+  transform: translateY(0);
 }
 .topbar.is-dark{
   background: rgba(10,10,12,.55);
@@ -227,7 +235,7 @@ button{font-family:inherit}
   scroll-snap-align: start;
   scroll-snap-stop: always;
 
-  /* Logo positioning (single source of truth) */
+  /* Logo positioning */
   --logo-pad: clamp(200px, 20vw, 320px);
   --logo-w:   clamp(820px, 62vw, 1200px);
   --logo-x:   clamp(-80px, -5vw, -20px);
@@ -387,8 +395,8 @@ button{font-family:inherit}
   background: radial-gradient(closest-side, rgba(0,0,0,.28), rgba(0,0,0,0));
   filter: blur(28px);
   opacity: 0;
-  transition: opacity 1.2s ease;
   pointer-events:none;
+  transition: opacity 1.44s ease;
 }
 .heroCar{
   position:absolute;
@@ -399,9 +407,16 @@ button{font-family:inherit}
   height:auto;
   opacity: 0;
   filter: drop-shadow(0 40px 90px rgba(0,0,0,.40));
-  transition: opacity 1.2s ease;
   pointer-events:none;
+  transform: translateY(28px);
+  transition: opacity 1.44s ease, transform 1.44s cubic-bezier(0.22, 1, 0.36, 1);
 }
+.hero.is-ready .heroCar{
+  opacity: 1;
+  transform: translateY(0);
+}
+.hero.is-ready .heroCarShadow{ opacity: .75; }
+
 @media (max-width: 1100px){
   .heroCar{ right: -40px; width: clamp(400px, 52vw, 700px); }
   .heroCarShadow{ right: -70px; top: 240px; }
@@ -421,8 +436,6 @@ button{font-family:inherit}
     filter: blur(18px);
   }
 }
-.hero.is-ready .heroCar{ opacity: 1; filter: drop-shadow(0 40px 90px rgba(0,0,0,.40)); }
-.hero.is-ready .heroCarShadow{ opacity: .75; }
 
 /* Scroll hint */
 .scrollhint{
@@ -644,6 +657,128 @@ button{font-family:inherit}
   .scanLabel--br{ bottom: 20%; right: 3%; }
 }
 
+/* ── Аннотации-выноски: точка → линия → текст ── */
+.scanAnnotations{
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+/* Базовый блок — flex-строка */
+.scanNote{
+  position: absolute;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  /* появление */
+  transition: opacity .42s ease, transform .42s ease;
+}
+.scanNote.is-visible{ opacity: 1; }
+
+/* Вправо: dot → line → label */
+.scanNote--r{ flex-direction: row; }
+/* Влево: label ← line ← dot (row-reverse + позиционирование через right:) */
+.scanNote--l{ flex-direction: row-reverse; }
+
+/* Пульсирующая точка */
+.scanNote__dot{
+  flex: 0 0 10px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255,45,45,.22);
+  z-index: 2;
+  position: relative;
+}
+.scanNote.is-visible .scanNote__dot{
+  animation: notePulse 2.4s ease-out infinite;
+}
+@keyframes notePulse{
+  0%  { box-shadow: 0 0 0 0   rgba(255,45,45,.50); }
+  70% { box-shadow: 0 0 0 10px rgba(255,45,45,0);  }
+  100%{ box-shadow: 0 0 0 0   rgba(255,45,45,0);   }
+}
+
+/* Горизонтальная линия */
+.scanNote__line{
+  flex: 0 0 clamp(55px, 8vw, 115px);
+  height: 1px;
+  background: linear-gradient(90deg,
+    rgba(255,45,45,.80),
+    rgba(0,140,255,.55)
+  );
+}
+/* Для левых выносок — зеркалим градиент линии */
+.scanNote--l .scanNote__line{
+  background: linear-gradient(90deg,
+    rgba(0,140,255,.55),
+    rgba(255,45,45,.80)
+  );
+}
+
+/* Текстовая карточка */
+.scanNote__label{
+  background: rgba(255,255,255,.94);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 12px;
+  padding: 9px 13px;
+  width: clamp(148px, 16vw, 188px);
+  box-shadow: 0 4px 18px rgba(0,0,0,.09);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  /* появление сдвигом */
+  transform: translateX(0);
+  transition: transform .42s ease;
+}
+.scanNote--r .scanNote__label{
+  transform: translateX(-8px);
+}
+.scanNote--l .scanNote__label{
+  transform: translateX(8px);
+}
+.scanNote.is-visible .scanNote__label{
+  transform: translateX(0) !important;
+}
+
+.scanNote__title{
+  font-weight: 900;
+  font-size: 12.5px;
+  color: #111;
+  margin-bottom: 4px;
+  letter-spacing: -.01em;
+}
+.scanNote__text{
+  font-size: 11px;
+  color: rgba(17,17,17,.58);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ─── Позиции точек на чертеже ───
+   Чертёж центрирован (~27%–73% по ширине).
+   Правые выноски: left: X% → точка на правом крае чертежа, текст уходит вправо.
+   Левые выноски:  right: Y% → точка на левом крае, текст уходит влево.
+*/
+
+/* Двигатель — нижняя часть (передок авто), вправо */
+.scanNote--engine    { left: 58%; top: 65%; }
+
+/* Подвеска — левое колесо, влево (right = 100% - 34% = 66%) */
+.scanNote--suspension{ right: 64%; top: 54%; }
+
+/* Электрика — правая сторона кабины, вправо */
+.scanNote--electrics { left: 60%; top: 38%; }
+
+/* ТО — верхняя часть (задок авто), влево (right = 100% - 46% = 54%) */
+.scanNote--service   { right: 54%; top: 22%; }
+
+/* Мобильные: скрываем выноски, не перекрывают чертёж */
+@media(max-width:780px){
+  .scanAnnotations{ display: none; }
+}
+
 /* infoCard — используется в других местах */
 .infoCard{
   border-radius: 20px;
@@ -807,27 +942,60 @@ button{font-family:inherit}
 }
 .progress__bar{height:100%; width: 0%; background: #fff; transform-origin: left;}
 
-/* Hero intro */
+/* Hero intro — единая скорость 1.44s для всех элементов */
 .hero.is-ready .hero-anim{ opacity: 1; transform: translateY(0); filter: blur(0); }
 .hero-anim{
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(22px);
   filter: blur(6px);
-  transition: opacity 1.05s ease, transform 1.05s ease, filter 1.05s ease;
+  transition: opacity 1.44s ease, transform 1.44s ease, filter 1.44s ease;
   will-change: opacity, transform, filter;
 }
 .hero-anim--1{ transition-delay: .10s; }
-.hero-anim--2{ transition-delay: .22s; }
-.hero-anim--3{ transition-delay: .34s; }
-.hero-anim--4{ transition-delay: .46s; }
-.hero-anim--5{ transition-delay: .58s; }
-.hero-anim--6{ transition-delay: .70s; }
+.hero-anim--2{ transition-delay: .28s; }
+.hero-anim--3{ transition-delay: .46s; }
+.hero-anim--4{ transition-delay: .64s; }
+.hero-anim--5{ transition-delay: .90s; }
+.hero-anim--6{ transition-delay: 1.10s; }
+
+/* Фоновые элементы — только opacity, без сдвига (они position:absolute/fixed) */
+.hero-anim-bg{
+  opacity: 0;
+  transform: none !important;
+  filter: none !important;
+  transition: opacity 1.80s ease !important;
+}
+.hero.is-ready .hero-anim-bg{ opacity: 1; }
+
+/* Переопределяем финальную opacity для каждого фон-элемента */
+.hero.is-ready .carbon       { opacity: .55; }
+.hero.is-ready .vignette     { opacity: 1;   }
+.hero.is-ready .glow--red    { opacity: .55; }
+.hero.is-ready .glow--steel  { opacity: .38; }
+.hero.is-ready .grain        { opacity: .18; }
+.hero.is-ready .watermark    { opacity: .10; }
+
+/* Задержки для фона — раньше контента, создают «подложку» */
+.hero-anim--bg1{ transition-delay: .00s; }  /* carbon + vignette — сразу */
+.hero-anim--bg2{ transition-delay: .20s; }  /* glow--red + grain */
+.hero-anim--bg3{ transition-delay: .40s; }  /* glow--steel + watermark */
+
+/* scrollhint — последний */
+.scrollhint{ opacity: 0; }
+.hero.is-ready .scrollhint{ opacity: .7; }
+
+
+
+/* heroCar и heroCarShadow анимации — см. блок "Hero intro" выше */
 
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   .hero-anim{transition:none; opacity:1; transform:none; filter:none}
+  .hero-anim-bg{transition:none !important; opacity:1 !important;}
+  .scrollhint{transition:none; opacity:.7}
   .reveal{transition:none; opacity:1; transform:none}
-  .heroCar{transition:none; opacity:1; filter:drop-shadow(0 40px 90px rgba(0,0,0,.40))}
+  .topbar{transition:none; transform:none}
+  .heroCar{transition:none; opacity:1; transform:none; filter:drop-shadow(0 40px 90px rgba(0,0,0,.40))}
   .heroCarShadow{transition:none; opacity:.6}
 }
 
@@ -937,4 +1105,34 @@ button{font-family:inherit}
 /* Mobile: hide large contact image (keep desktop) */
 @media (max-width: 520px){
   #contact .contactImage{ display:none; }
+}
+
+/* =========================================================
+   Intro splash (wipe + FLIP to hero logo)
+   ========================================================= */
+#intro{
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+#intro.is-gone{
+  display: none;
+}
+
+#introLogo{
+  /* Крупнее — хорошо читается с любого расстояния */
+  width: clamp(260px, 36vw, 480px);
+  height: auto;
+  opacity: 1;
+
+  /* Начальное состояние: полностью скрыт вайпом справа */
+  clip-path: inset(0 100% 0 0);
+
+  will-change: transform, clip-path, opacity;
+  filter: drop-shadow(0 8px 32px rgba(255,45,45,0.22));
 }
