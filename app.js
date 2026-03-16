@@ -146,11 +146,71 @@ window.addEventListener("resize", () => {
 });
 
 // ===========================
-// Hero intro (enables animations via .hero.is-ready)
+// Intro splash → hero reveal (wipe + FLIP)
 // ===========================
 window.addEventListener("load", () => {
-  const hero = document.querySelector(".hero");
-  if (hero) requestAnimationFrame(() => hero.classList.add("is-ready"));
+  const intro      = document.getElementById("intro");
+  const introLogo  = document.getElementById("introLogo");
+  const hero       = document.querySelector(".hero");
+  const heroLogoEl = document.querySelector(".logoHero");
+  const heroLogoImg= document.querySelector(".logoHero img");
+
+  if (!intro || !introLogo) {
+    if (hero) requestAnimationFrame(() => hero.classList.add("is-ready"));
+    return;
+  }
+
+  // Держим logoHero скрытым
+  if (heroLogoEl)  heroLogoEl.style.opacity = "0";
+  if (heroLogoImg) heroLogoImg.style.opacity = "0";
+
+  // ─── Фаза 1: вайп логотипа слева → справа (1.44s)
+  const phase1 = () => {
+    introLogo.style.transition = "clip-path 1.44s cubic-bezier(0.22, 1, 0.36, 1)";
+    introLogo.style.clipPath   = "inset(0 0% 0 0)";
+  };
+
+  // ─── Фаза 2: FLIP — логотип летит к .logoHero
+  const phase2 = () => {
+    if (!heroLogoImg) return;
+    const fromR = introLogo.getBoundingClientRect();
+    const toR   = heroLogoImg.getBoundingClientRect();
+    const scale = toR.width / fromR.width;
+    const tx = (toR.left + toR.width  / 2) - (fromR.left + fromR.width  / 2);
+    const ty = (toR.top  + toR.height / 2) - (fromR.top  + fromR.height / 2);
+    introLogo.style.transition      = "transform 0.75s cubic-bezier(0.4, 0, 0.2, 1)";
+    introLogo.style.transformOrigin = "center center";
+    introLogo.style.transform       = `translate(${tx}px, ${ty}px) scale(${scale})`;
+  };
+
+  // ─── Фаза 3: мгновенная подмена → flush → убрать оверлей → is-ready
+  const phase3 = () => {
+    // Мгновенная подмена логотипа
+    introLogo.style.transition = "none";
+    introLogo.style.opacity    = "0";
+    if (heroLogoEl)  { heroLogoEl.style.transition  = "none"; heroLogoEl.style.opacity  = "1"; }
+    if (heroLogoImg) { heroLogoImg.style.transition = "none"; heroLogoImg.style.opacity = "1"; }
+
+    // Синхронный layout flush — браузер рисует кадр с hero ДО следующей строки
+    void document.body.offsetHeight;
+
+    // Убираем оверлей мгновенно — никаких transition
+    intro.style.display = "none";
+
+    // Запускаем все анимации первого экрана
+    if (hero) hero.classList.add("is-ready");
+    const topbarEl = document.getElementById("topbar");
+    if (topbarEl) topbarEl.classList.add("is-ready");
+
+    // Возвращаем CSS-управление логотипом
+    requestAnimationFrame(() => {
+      if (heroLogoEl)  { heroLogoEl.style.transition = ""; heroLogoEl.style.opacity = ""; }
+    });
+  };
+
+  setTimeout(phase1,  200);
+  setTimeout(phase2, 1840);
+  setTimeout(phase3, 2650);
 });
 
 // ===========================
@@ -171,7 +231,7 @@ window.addEventListener("load", () => {
   const easeOut = (t) => 1 - Math.pow(1 - t, 3);
   const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
-  const DURATION = 5000; // ms — длительность анимации
+  const DURATION = 5000; // ms — длительность основной анимации
 
   function applyState(p) {
     const pEnter = easeOut(clamp01(p / 0.28));
@@ -179,6 +239,7 @@ window.addEventListener("load", () => {
     const revealEnd = 0.52;
     const pReveal = easeInOut(clamp01((p - revealStart) / (revealEnd - revealStart)));
 
+    // --- Машина въезжает и растворяется ---
     const yCar = lerp(165, -50, pEnter);
     car.style.transform = `translate(-50%, ${yCar}%)`;
     car.style.opacity = String(lerp(1, 0, pReveal));
@@ -188,20 +249,48 @@ window.addEventListener("load", () => {
     const shB = lerp(28, 14, pReveal);
     car.style.filter = `drop-shadow(0 ${shY}px ${shB}px rgba(0,0,0,${shA}))`;
 
-    blueprint.style.opacity = String(lerp(0, 1, pReveal));
+    // --- Чертёж раскрывается снизу вверх ---
     const clip = lerp(100, 0, pReveal);
+    blueprint.style.opacity = String(lerp(0, 1, pReveal));
     blueprint.style.clipPath = `inset(${clip}% 0 0 0)`;
 
+    // --- Луч строго синхронизирован с границей clip-path ---
+    // clip% = отступ сверху у blueprint; граница видимой области движется снизу вверх
     beam.style.opacity = String(lerp(0, 1, pReveal));
-    const beamTop = lerp(112, -12, pReveal);
-    beam.style.top = `${beamTop}%`;
+
+    const stageH = section.offsetHeight || 1;
+    const bpH = blueprint.offsetHeight || 0;
+    // Blueprint центрирован вертикально внутри stage
+    const bpOffsetTop = (stageH - bpH) / 2;
+    // Граница клипа в пикселях от верха stage
+    const clipBoundaryPx = bpOffsetTop + (clip / 100) * bpH;
+    // Центр луча (высота луча = 160px) совмещаем с границей
+    const beamTopPx = clipBoundaryPx - 80;
+    beam.style.top = `${(beamTopPx / stageH) * 100}%`;
 
     if (grid) grid.style.opacity = String(lerp(0, 0.55, pReveal));
     if (hud) hud.style.opacity = String(lerp(0, 0.7, pReveal));
   }
 
+  // --- Аннотации узлов: появляются последовательно после scan ---
+  function startAnnotations() {
+    const notes = [...section.querySelectorAll(".scanNote")];
+    if (!notes.length) return;
+
+    let idx = 0;
+    function showNext() {
+      if (idx >= notes.length) return;
+      notes[idx].classList.add("is-visible");
+      idx++;
+      if (idx < notes.length) setTimeout(showNext, 380);
+    }
+    // Запускаем сразу после окончания скана — без задержки
+    showNext();
+  }
+
   if (prefersReducedMotion) {
     applyState(1);
+    startAnnotations();
     return;
   }
 
@@ -212,7 +301,12 @@ window.addEventListener("load", () => {
     if (!startTime) startTime = ts;
     const p = clamp01((ts - startTime) / DURATION);
     applyState(p);
-    if (p < 1) requestAnimationFrame(animate);
+    if (p < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      // Основная анимация завершена — запускаем аннотации
+      startAnnotations();
+    }
   }
 
   const io = new IntersectionObserver(
