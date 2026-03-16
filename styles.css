@@ -472,35 +472,99 @@ button{font-family:inherit}
 .section--light{background: #fff; color:#111}
 
 /* =============================================
-   Scan section — полноэкранная сцена
+   Scan section — текст + сцена
    ============================================= */
 .section--scan{
   position: relative;
   background: #fff;
-  padding: 0;
+  padding: 72px 0 48px;
   overflow: hidden;
-  /* min-height: 100vh — уже задан через .section */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  min-height: auto; /* переопределяем .section */
 }
 
-/* Сцена занимает ВЕСЬ блок */
+/* ── Заголовок секции ── */
+.scanHeader{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px 48px;
+  align-items: start;
+  padding-bottom: 48px;
+}
+.scanHeader__kicker{
+  grid-column: 1 / -1;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: -20px;
+}
+.scanHeader__title{
+  font-size: clamp(32px, 4vw, 54px);
+  font-weight: 900;
+  line-height: 1.06;
+  letter-spacing: -.02em;
+  color: #111;
+  margin: 0;
+}
+.scanHeader__desc{
+  font-size: 15px;
+  line-height: 1.72;
+  color: rgba(17,17,17,.60);
+  margin: 0;
+  align-self: center;
+}
+.scanHeader__stats{
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0,0,0,.08);
+  margin-top: 8px;
+}
+.scanStat__val{
+  font-size: 22px;
+  font-weight: 900;
+  color: #111;
+  letter-spacing: -.02em;
+}
+.scanStat__lbl{
+  font-size: 12px;
+  color: rgba(17,17,17,.50);
+  margin-top: 2px;
+}
+@media(max-width: 760px){
+  .scanHeader{ grid-template-columns: 1fr; }
+  .scanHeader__kicker{ margin-bottom: -12px; }
+}
+
+/* ── Сцена с чертежом ── */
 .scanStage{
-  position: absolute;
-  inset: 0;
+  position: relative;
+  width: 100%;
+  height: clamp(420px, 58vh, 700px);
   pointer-events: none;
+  flex-shrink: 0;
 }
 
-/* Машина и чертёж — абсолютно по центру */
+/* Машина и чертёж — меньше, центрированы */
 .scanCar,
 .scanBlueprint{
   position: absolute;
   left: 50%;
   top: 50%;
-  width: clamp(300px, 46vw, 680px);
+  width: clamp(220px, 30vw, 460px);
   height: auto;
   pointer-events: none;
 }
 @media (max-width: 768px){
-  .scanCar, .scanBlueprint{ width: clamp(240px, 72vw, 400px); }
+  .scanCar, .scanBlueprint{ width: clamp(180px, 55vw, 300px); }
 }
 
 .scanCar{
@@ -515,6 +579,76 @@ button{font-family:inherit}
   clip-path: inset(100% 0 0 0);
   will-change: opacity, clip-path;
   filter: drop-shadow(0 10px 30px rgba(0,0,0,.10)) saturate(1.05);
+}
+
+/* ── Hover-зоны поверх чертежа ── */
+/* Контейнер совпадает с размером и позицией blueprint */
+.scanZones{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(220px, 30vw, 460px);
+  /* Соотношение сторон чертежа ≈ 0.79 (портрет) */
+  aspect-ratio: 0.79;
+  transform: translate(-50%, -50%);
+  z-index: 7;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.scanZones.is-active{
+  pointer-events: auto;
+  opacity: 1;
+}
+@media (max-width: 768px){
+  .scanZones{ width: clamp(180px, 55vw, 300px); }
+}
+
+.scanZone{
+  position: absolute;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background .25s ease, box-shadow .25s ease;
+}
+/* Базовый hover-эффект */
+.scanZone:hover{
+  background: rgba(255,45,45,.12);
+  box-shadow: 0 0 0 1.5px rgba(255,45,45,.35),
+              0 0 22px rgba(255,45,45,.18);
+}
+/* Активная зона (при hover через JS) */
+.scanZone.is-hovered{
+  background: rgba(255,45,45,.14);
+  box-shadow: 0 0 0 2px rgba(255,45,45,.45),
+              0 0 28px rgba(255,45,45,.22);
+}
+
+/* ── Позиции зон на чертеже (% от контейнера) ──
+   Чертёж: верх = задняя часть авто, низ = передняя + двигатель
+*/
+/* Двигатель — нижняя треть, центр */
+.scanZone--engine{
+  left: 22%; top: 62%;
+  width: 56%; height: 28%;
+  border-radius: 38%;
+}
+/* Подвеска — левое колесо (переднее + заднее) */
+.scanZone--suspension{
+  left: 0%; top: 20%;
+  width: 28%; height: 58%;
+  border-radius: 30%;
+}
+/* Электрика — кабина, центр */
+.scanZone--electrics{
+  left: 22%; top: 28%;
+  width: 56%; height: 30%;
+  border-radius: 40%;
+}
+/* ТО — задняя часть (верх чертежа) */
+.scanZone--service{
+  left: 25%; top: 3%;
+  width: 50%; height: 22%;
+  border-radius: 40%;
 }
 
 /* Сканирующая полоса */
@@ -576,113 +710,68 @@ button{font-family:inherit}
 }
 .scanFade--top{
   inset: 0 0 auto 0;
-  height: 32%;
-  background: linear-gradient(180deg,
-    #ffffff 0%,
-    rgba(255,255,255,.80) 40%,
-    transparent 100%);
+  height: 28%;
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,.80) 40%, transparent 100%);
 }
 .scanFade--bottom{
   inset: auto 0 0 0;
-  height: 32%;
-  background: linear-gradient(0deg,
-    #ffffff 0%,
-    rgba(255,255,255,.80) 40%,
-    transparent 100%);
+  height: 28%;
+  background: linear-gradient(0deg, #ffffff 0%, rgba(255,255,255,.80) 40%, transparent 100%);
 }
 .scanFade--left{
   inset: 0 auto 0 0;
-  width: 24%;
-  background: linear-gradient(90deg,
-    #ffffff 0%,
-    rgba(255,255,255,.80) 45%,
-    transparent 100%);
+  width: 20%;
+  background: linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,.80) 45%, transparent 100%);
 }
 .scanFade--right{
   inset: 0 0 0 auto;
-  width: 24%;
-  background: linear-gradient(270deg,
-    #ffffff 0%,
-    rgba(255,255,255,.80) 45%,
-    transparent 100%);
+  width: 20%;
+  background: linear-gradient(270deg, #ffffff 0%, rgba(255,255,255,.80) 45%, transparent 100%);
 }
 
-/* ── Текстовые метки по 4 углам, поверх fade ── */
-.scanLabel{
-  position: absolute;
-  z-index: 8;
-  max-width: 210px;
-}
-.scanLabel--tl{ top: 12%;  left:  5%; }
-.scanLabel--tr{ top: 12%;  right: 5%; text-align: right; }
-.scanLabel--bl{ bottom: 16%; left:  5%; }
-.scanLabel--br{ bottom: 16%; right: 5%; text-align: right; }
-
-.scanLabel__head{
-  font-weight: 900;
-  font-size: 15px;
-  color: #111;
-  margin-bottom: 5px;
-}
-.scanLabel__body{
-  font-size: 13px;
-  line-height: 1.6;
-  color: rgba(17,17,17,.55);
-  margin: 0;
-}
-
-/* CTA — закреплено в центре внизу, поверх stage */
+/* ── CTA ── */
 .scanCta{
-  position: absolute;
-  bottom: 7%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 8;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
   pointer-events: auto;
-  white-space: nowrap;
+  padding: 32px 0 0;
 }
 
-/* Мобильные */
-@media (max-width: 640px){
-  .scanLabel{ max-width: 130px; }
-  .scanLabel__body{ display: none; }
-  .scanLabel__head{ font-size: 12px; }
-  .scanLabel--tl{ top: 10%; left: 3%; }
-  .scanLabel--tr{ top: 10%; right: 3%; }
-  .scanLabel--bl{ bottom: 20%; left: 3%; }
-  .scanLabel--br{ bottom: 20%; right: 3%; }
-}
-
-/* ── Аннотации-выноски: точка → линия → текст ── */
+/* ── Аннотации-выноски ── */
 .scanAnnotations{
   position: absolute;
   inset: 0;
   z-index: 6;
   pointer-events: none;
 }
-
-/* Базовый блок — flex-строка */
 .scanNote{
   position: absolute;
   display: flex;
   align-items: center;
   opacity: 0;
   pointer-events: none;
-  /* появление */
   transition: opacity .42s ease, transform .42s ease;
 }
 .scanNote.is-visible{ opacity: 1; }
+/* Подсветка аннотации при hover на зону */
+.scanNote.is-highlight .scanNote__dot{
+  background: var(--accent);
+  box-shadow: 0 0 0 6px rgba(255,45,45,.28);
+  transform: scale(1.3);
+}
+.scanNote.is-highlight .scanNote__label{
+  border-color: rgba(255,45,45,.25);
+  box-shadow: 0 6px 24px rgba(255,45,45,.14);
+}
+.scanNote.is-highlight .scanNote__title{
+  color: var(--accent);
+}
 
-/* Вправо: dot → line → label */
 .scanNote--r{ flex-direction: row; }
-/* Влево: label ← line ← dot (row-reverse + позиционирование через right:) */
 .scanNote--l{ flex-direction: row-reverse; }
 
-/* Пульсирующая точка */
 .scanNote__dot{
   flex: 0 0 10px;
   width: 10px; height: 10px;
@@ -691,9 +780,13 @@ button{font-family:inherit}
   box-shadow: 0 0 0 3px rgba(255,45,45,.22);
   z-index: 2;
   position: relative;
+  transition: transform .25s ease, box-shadow .25s ease;
 }
 .scanNote.is-visible .scanNote__dot{
   animation: notePulse 2.4s ease-out infinite;
+}
+.scanNote.is-highlight .scanNote__dot{
+  animation: none;
 }
 @keyframes notePulse{
   0%  { box-shadow: 0 0 0 0   rgba(255,45,45,.50); }
@@ -701,46 +794,29 @@ button{font-family:inherit}
   100%{ box-shadow: 0 0 0 0   rgba(255,45,45,0);   }
 }
 
-/* Горизонтальная линия */
 .scanNote__line{
-  flex: 0 0 clamp(55px, 8vw, 115px);
+  flex: 0 0 clamp(45px, 7vw, 100px);
   height: 1px;
-  background: linear-gradient(90deg,
-    rgba(255,45,45,.80),
-    rgba(0,140,255,.55)
-  );
+  background: linear-gradient(90deg, rgba(255,45,45,.80), rgba(0,140,255,.55));
+  transition: opacity .25s ease;
 }
-/* Для левых выносок — зеркалим градиент линии */
 .scanNote--l .scanNote__line{
-  background: linear-gradient(90deg,
-    rgba(0,140,255,.55),
-    rgba(255,45,45,.80)
-  );
+  background: linear-gradient(90deg, rgba(0,140,255,.55), rgba(255,45,45,.80));
 }
 
-/* Текстовая карточка */
 .scanNote__label{
-  background: rgba(255,255,255,.94);
+  background: rgba(255,255,255,.96);
   border: 1px solid rgba(0,0,0,.08);
   border-radius: 12px;
-  padding: 9px 13px;
-  width: clamp(148px, 16vw, 188px);
+  padding: 10px 14px;
+  width: clamp(148px, 15vw, 192px);
   box-shadow: 0 4px 18px rgba(0,0,0,.09);
   backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  /* появление сдвигом */
-  transform: translateX(0);
-  transition: transform .42s ease;
+  transition: border-color .25s ease, box-shadow .25s ease;
 }
-.scanNote--r .scanNote__label{
-  transform: translateX(-8px);
-}
-.scanNote--l .scanNote__label{
-  transform: translateX(8px);
-}
-.scanNote.is-visible .scanNote__label{
-  transform: translateX(0) !important;
-}
+.scanNote--r .scanNote__label{ transform: translateX(-8px); }
+.scanNote--l .scanNote__label{ transform: translateX(8px); }
+.scanNote.is-visible .scanNote__label{ transform: translateX(0) !important; }
 
 .scanNote__title{
   font-weight: 900;
@@ -748,6 +824,7 @@ button{font-family:inherit}
   color: #111;
   margin-bottom: 4px;
   letter-spacing: -.01em;
+  transition: color .25s ease;
 }
 .scanNote__text{
   font-size: 11px;
@@ -756,27 +833,28 @@ button{font-family:inherit}
   margin: 0;
 }
 
-/* ─── Позиции точек на чертеже ───
-   Чертёж центрирован (~27%–73% по ширине).
-   Правые выноски: left: X% → точка на правом крае чертежа, текст уходит вправо.
-   Левые выноски:  right: Y% → точка на левом крае, текст уходит влево.
-*/
+/* ── Правильные позиции аннотаций
+   Чертёж: верх = задняя часть, низ = передняя + двигатель
+   Чертёж центрирован в stage. Stage width ~100%, height ~58vh.
+   Blueprint = ~30vw wide, aspect 0.79 → height ~38vw
+   В stage: горизонт 35%-65%, вертикаль зависит от соотношения
+──  */
 
-/* Двигатель — нижняя часть (передок авто), вправо */
-.scanNote--engine    { left: 58%; top: 65%; }
+/* Двигатель — нижняя часть чертежа (передок), точка на правом краю зоны двигателя */
+.scanNote--engine    { left: 58%; top: 70%; }
 
-/* Подвеска — левое колесо, влево (right = 100% - 34% = 66%) */
-.scanNote--suspension{ right: 64%; top: 54%; }
+/* Подвеска — левое колесо (середина по высоте) */
+.scanNote--suspension{ right: 62%; top: 52%; }
 
-/* Электрика — правая сторона кабины, вправо */
+/* Электрика — кабина, правая сторона */
 .scanNote--electrics { left: 60%; top: 38%; }
 
-/* ТО — верхняя часть (задок авто), влево (right = 100% - 46% = 54%) */
-.scanNote--service   { right: 54%; top: 22%; }
+/* ТО — задняя часть (верх чертежа), левая сторона */
+.scanNote--service   { right: 56%; top: 20%; }
 
-/* Мобильные: скрываем выноски, не перекрывают чертёж */
 @media(max-width:780px){
   .scanAnnotations{ display: none; }
+  .scanZones{ display: none; }
 }
 
 /* infoCard — используется в других местах */
@@ -846,27 +924,53 @@ button{font-family:inherit}
 /* Contact */
 #contact.section{ padding: 82px 0 120px; }
 
+/* Шапка: заголовок слева, кнопки справа */
+.contact__header{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.contact__header .contactActions{
+  margin-top: 0;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* Основное тело: реквизиты + карта в ряд */
+.contact__body{
+  display: grid;
+  grid-template-columns: minmax(260px, 360px) 1fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 760px){
+  .contact__body{ grid-template-columns: 1fr; }
+}
+
 .contact{
-  margin-top: 14px;
-  display:grid; gap: 10px;
+  display: grid;
+  gap: 10px;
   border-radius: 20px;
   border: 1px solid rgba(0,0,0,.10);
   padding: 14px;
   background: rgba(0,0,0,.02);
 }
-.contact__row{display:grid; grid-template-columns: 140px 1fr; gap: 10px}
-@media (max-width: 520px){ .contact__row{grid-template-columns:1fr} }
-.contact__label{opacity:.65; font-size: 13px}
-.contact__value{font-weight:800}
+.contact__row{ display: grid; grid-template-columns: 120px 1fr; gap: 10px; }
+@media (max-width: 520px){ .contact__row{ grid-template-columns: 1fr; } }
+.contact__label{ opacity: .65; font-size: 13px; }
+.contact__value{ font-weight: 800; }
 
 .contactActions{
-  margin-top: 12px;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
+
+/* Карта — на всю оставшуюся ширину, высокая */
 .contactMap{
-  margin-top: 14px;
   border-radius: 20px;
   overflow: hidden;
   background: #fff;
@@ -874,37 +978,9 @@ button{font-family:inherit}
 }
 .contactMap iframe{
   width: 100%;
-  height: clamp(260px, 42vw, 360px);
+  height: clamp(300px, 45vw, 480px);
   border: 0;
   display: block;
-}
-
-/* Right image */
-.contactImage{
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  overflow: visible;
-}
-.contactArt{
-  width: min(700px, 100%);
-  height: auto;
-  display: block;
-  transform: translate(120px, -70px) scale(1.25);
-  transform-origin: top right;
-}
-@media (max-width: 1120px){
-  .contactArt{ transform: translate(60px, -40px) scale(1.15); }
-}
-@media (max-width: 920px){
-  .contactImage{ justify-content: center; margin-top: 16px; }
-  .contactArt{ width: min(520px, 100%); transform: none; }
 }
 
 /* Footer snap */
@@ -1104,7 +1180,7 @@ button{font-family:inherit}
 
 /* Mobile: hide large contact image (keep desktop) */
 @media (max-width: 520px){
-  #contact .contactImage{ display:none; }
+  /* contact image removed */
 }
 
 /* =========================================================

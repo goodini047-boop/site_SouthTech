@@ -25,7 +25,6 @@
 
     <nav class="nav" aria-label="Навигация">
       <a href="#top">Главная</a>
-      <a href="#scan">Диагностика</a>
       <a href="#services">Услуги</a>
       <a href="#contact">Контакты</a>
     </nav>
@@ -50,7 +49,6 @@
 
       <div class="mobile__links">
         <a href="#top" data-mobile-link>Главная</a>
-        <a href="#scan" data-mobile-link>Диагностика</a>
         <a href="#services" data-mobile-link>Услуги</a>
         <a href="#contact" data-mobile-link>Контакты</a>
 
@@ -92,7 +90,7 @@
 
           <div class="hero__cta hero-anim hero-anim--3">
             <a class="btn" href="tel:+79088237342">Записаться</a>
-            <a class="btn btn--ghost" href="#scan">Посмотреть диагностику</a>
+            <a class="btn btn--ghost" href="#services">Наши услуги</a>
           </div>
 
           <div class="hero__bar hero-anim hero-anim--4">
@@ -125,107 +123,11 @@
     </div>
   </main>
 
-  <!-- Диагностика + скан -->
-  <!-- Диагностика + скан -->
-  <section id="scan" class="section section--scan">
 
-    <!-- Полноэкранная сцена без рамок -->
-    <div class="scanStage" id="scanStage">
-
-      <!-- Машина и чертёж — в центре сцены -->
-      <img class="scanCar"       id="scanCar"       src="assets/bmw_render.png"    alt="" aria-hidden="true" />
-      <img class="scanBlueprint" id="scanBlueprint" src="assets/bmw_blueprint.png" alt="" aria-hidden="true" />
-
-      <div class="scanGrid" id="scanGrid" aria-hidden="true"></div>
-      <div class="scanBeam" id="scanBeam" aria-hidden="true"></div>
-
-      <div class="scanHUD" id="scanHUD" aria-hidden="true">
-        <span class="hudCircle c1"></span>
-        <span class="hudCircle c2"></span>
-        <span class="hudLine l1"></span>
-        <span class="hudLine l2"></span>
-      </div>
-
-      <!-- Аннотации узлов: точка на чертеже → линия → текст за пределами -->
-      <div class="scanAnnotations" id="scanAnnotations" aria-hidden="true">
-
-        <!-- Двигатель: точка в нижней части чертежа, линия вправо -->
-        <div class="scanNote scanNote--r scanNote--engine">
-          <span class="scanNote__dot"></span>
-          <span class="scanNote__line"></span>
-          <div class="scanNote__label">
-            <div class="scanNote__title">Двигатель</div>
-            <p class="scanNote__text">ГРМ, турбо, утечки, ремонт узлов — 20&nbsp;лет с любыми проблемами.</p>
-          </div>
-        </div>
-
-        <!-- Подвеска: точка на левом борту, линия влево -->
-        <div class="scanNote scanNote--l scanNote--suspension">
-          <span class="scanNote__dot"></span>
-          <span class="scanNote__line"></span>
-          <div class="scanNote__label">
-            <div class="scanNote__title">Подвеска и тормоза</div>
-            <p class="scanNote__text">Рычаги, сайлентблоки, ступицы, диски — только нужное, без лишних замен.</p>
-          </div>
-        </div>
-
-        <!-- Электрика: точка в районе кабины, линия вправо -->
-        <div class="scanNote scanNote--r scanNote--electrics">
-          <span class="scanNote__dot"></span>
-          <span class="scanNote__line"></span>
-          <div class="scanNote__label">
-            <div class="scanNote__title">Электрика</div>
-            <p class="scanNote__text">Сканер, live&nbsp;data, CAN-шина, датчики — сначала данные, потом вывод.</p>
-          </div>
-        </div>
-
-        <!-- ТО: точка в верхней части (задняя часть авто), линия влево -->
-        <div class="scanNote scanNote--l scanNote--service">
-          <span class="scanNote__dot"></span>
-          <span class="scanNote__line"></span>
-          <div class="scanNote__label">
-            <div class="scanNote__title">ТО по регламенту</div>
-            <p class="scanNote__text">Масло, фильтры, жидкости — строго по нормам завода-изготовителя.</p>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Растворение краёв в белый фон -->
-      <div class="scanFade scanFade--top"    aria-hidden="true"></div>
-      <div class="scanFade scanFade--bottom" aria-hidden="true"></div>
-      <div class="scanFade scanFade--left"   aria-hidden="true"></div>
-      <div class="scanFade scanFade--right"  aria-hidden="true"></div>
-
-      <!-- Текст по углам -->
-      <div class="scanLabel scanLabel--tl reveal slow">
-        <div class="scanLabel__head">Диагностика</div>
-        <p class="scanLabel__body">Сначала данные&nbsp;&mdash; затем вывод&nbsp;&mdash; затем решение.</p>
-      </div>
-
-      <div class="scanLabel scanLabel--tr reveal slow">
-        <div class="scanLabel__head">Сканер и параметры</div>
-        <p class="scanLabel__body">Ошибки, live&nbsp;data, тесты исполнительных механизмов.</p>
-      </div>
-
-      <div class="scanLabel scanLabel--bl reveal slow">
-        <div class="scanLabel__head">Проверка симптомов</div>
-        <p class="scanLabel__body">Тест-драйв, измерения, визуальный осмотр.</p>
-      </div>
-
-      <div class="scanLabel scanLabel--br reveal slow">
-        <div class="scanLabel__head">Простые слова</div>
-        <p class="scanLabel__body">Почему именно это? Что будет, если отложить?</p>
-      </div>
-    </div>
-
-    <!-- CTA под сценой -->
-    <div class="wrap scanCta reveal slow">
-      <a class="btn" href="tel:+79088237342">Записаться</a>
-      <a class="btn btn--ghost darkGhost" href="#services">Перейти к услугам</a>
-    </div>
-
-  </section>
+  <!-- ============================================================
+       БЛОК ДИАГНОСТИКИ ВРЕМЕННО ОТКЛЮЧЁН — вернуть: убрать этот
+       комментарий и восстановить section#scan из резервной копии
+       ============================================================ -->
 
   <!-- SERVICES -->
   <section id="services" class="section section--dark">
@@ -293,26 +195,38 @@
 
   <!-- CONTACT -->
   <section id="contact" class="section section--light">
-    <div class="wrap grid2">
-      <div class="reveal slow">
-        <h2 class="h2">Контакты</h2>
-        <p class="copy">
-          Техцентр ЮГ — диагностика, ремонт, обслуживание. Запись по телефону.
-        </p>
+    <div class="wrap reveal slow">
+      <div class="contact__header">
+        <div>
+          <h2 class="h2">Контакты</h2>
+          <p class="copy">
+            Техцентр ЮГ — диагностика, ремонт, обслуживание. Запись по телефону.
+          </p>
+        </div>
+        <div class="contactActions">
+          <a class="btn" target="_blank" rel="noopener"
+             href="https://www.google.com/maps?daddr=53.3523894,59.0007466">
+            Построить маршрут
+          </a>
+          <a class="btn btn--ghost" target="_blank" rel="noopener"
+             href="https://www.google.com/maps/place/%D0%A2%D0%B5%D1%85%D1%86%D0%B5%D0%BD%D1%82%D1%80+%D0%AE%D0%93/@53.3524899,59.001501,154m/data=!3m1!1e3!4m12!1m5!3m4!2zNTPCsDIxJzA4LjYiTiA1OcKwMDAnMDIuNyJF!8m2!3d53.3523894!4d59.0007466!3m5!1s0x43d12f2fd5f03095:0xc2332870eaf79de3!8m2!3d53.3523894!4d59.0007466!16s%2Fg%2F113hrqr6y?entry=ttu&g_ep=EgoyMDI2MDIxMS4wIKXMDSoASAFQAw%3D%3D">
+            Открыть в Google Maps
+          </a>
+        </div>
+      </div>
 
+      <div class="contact__body">
         <div class="contact">
           <div class="contact__row">
             <div class="contact__label">Адрес</div>
             <div class="contact__value">г. Магнитогорск, ул. Калмыкова, 26</div>
           </div>
-
           <div class="contact__row">
             <div class="contact__label">Телефон</div>
             <div class="contact__value">
               <a class="link" href="tel:+79088237342">+7 (908) 823-73-42</a>
             </div>
           </div>
-
           <div class="contact__row">
             <div class="contact__label">Часы</div>
             <div class="contact__value">Пн–Пт 10:00–19:00, Сб–Вс выходной</div>
@@ -327,29 +241,6 @@
             allowfullscreen
             title="Техцентр ЮГ — Магнитогорск"
           ></iframe>
-        </div>
-
-        <div class="contactActions">
-          <a class="btn" target="_blank" rel="noopener"
-             href="https://www.google.com/maps?daddr=53.3523894,59.0007466">
-            Построить маршрут
-          </a>
-          <a class="btn btn--ghost" target="_blank" rel="noopener"
-             href="https://www.google.com/maps/place/%D0%A2%D0%B5%D1%85%D1%86%D0%B5%D0%BD%D1%82%D1%80+%D0%AE%D0%93/@53.3524899,59.001501,154m/data=!3m1!1e3!4m12!1m5!3m4!2zNTPCsDIxJzA4LjYiTiA1OcKwMDAnMDIuNyJF!8m2!3d53.3523894!4d59.0007466!3m5!1s0x43d12f2fd5f03095:0xc2332870eaf79de3!8m2!3d53.3523894!4d59.0007466!16s%2Fg%2F113hrqr6y?entry=ttu&g_ep=EgoyMDI2MDIxMS4wIKXMDSoASAFQAw%3D%3D">
-            Открыть в Google Maps
-          </a>
-        </div>
-      </div>
-
-      <div class="reveal slow">
-        <div class="contactImage">
-          <img
-            class="contactArt"
-            src="assets/contact-car.png"
-            alt="Автомобиль"
-            loading="lazy"
-            decoding="async"
-          />
         </div>
       </div>
     </div>
