@@ -235,20 +235,8 @@ button{font-family:inherit}
   scroll-snap-align: start;
   scroll-snap-stop: always;
 
-  /* Logo positioning */
-  --logo-pad: clamp(200px, 20vw, 320px);
-  --logo-w:   clamp(820px, 62vw, 1200px);
-  --logo-x:   clamp(-80px, -5vw, -20px);
-  --logo-y:   clamp(-260px, -16vw, -160px);
 }
-@media (max-width: 980px){
-  .hero{
-    --logo-pad: clamp(140px, 26vw, 220px);
-    --logo-w:   clamp(420px, 92vw, 760px);
-    --logo-x:   clamp(-20px, -4vw, 0px);
-    --logo-y:   clamp(-140px, -18vw, -70px);
-  }
-}
+
 
 .hero__bg{position:absolute; inset:0; transform: translateZ(0); }
 .carbon{
@@ -309,7 +297,7 @@ button{font-family:inherit}
   width:100%;
   max-width:1120px;
   margin:0 auto;
-  padding: 34px 18px 66px;
+  padding: 18px 18px 66px;
   z-index: 5; /* выше машины */
 }
 
@@ -322,26 +310,30 @@ button{font-family:inherit}
 @media (max-width: 980px){ .heroGrid{grid-template-columns:1fr;} }
 
 /* reserve space for logo in left column */
-.heroGrid > :first-child{ position: relative; padding-top: var(--logo-pad); }
+.heroGrid > :first-child{ position: relative; }
 
 /* Logo */
 .logoHero{
-  position:absolute;
-  left: var(--logo-x);
-  top: calc(var(--logo-y) + 140px); /* ← 60px опускает логотип ниже */
-  width: var(--logo-w);
-  margin:0;
-  padding:0;
+  position: relative;
+  width: clamp(480px, 84vw, 950px);
+  margin: 5px 0 -260px -70px;
+  padding: 0;
   background: transparent;
   border: 0;
   z-index: 6;
-  pointer-events:none;
+  pointer-events: none;
 }
 .logoHero img{
-  width:100%;
-  height:auto;
-  display:block;
+  width: 100%;
+  height: auto;
+  display: block;
   filter: drop-shadow(0 20px 50px rgba(0,0,0,.55));
+}
+@media (max-width: 980px){
+  .logoHero{ width: clamp(360px, 96vw, 660px); margin-top: 5px; margin-bottom: -120px; }
+}
+@media (max-width: 520px){
+  .logoHero{ width: clamp(300px, 108vw, 480px); margin-top: 5px; margin-bottom: -84px; }
 }
 
 .hero__cta{display:flex; gap:10px; flex-wrap:wrap; margin-top: 6px}
@@ -924,63 +916,89 @@ button{font-family:inherit}
 /* Contact */
 #contact.section{ padding: 82px 0 120px; }
 
-/* Шапка: заголовок слева, кнопки справа */
-.contact__header{
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
+/* Заголовок */
+.contact__top{
+  margin-bottom: 32px;
+}
+.contact__top .h2{ margin-bottom: 8px; }
+
+/* Реквизиты крупно — 3 колонки на десктопе */
+.contact__info{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
   margin-bottom: 28px;
-}
-.contact__header .contactActions{
-  margin-top: 0;
-  flex-shrink: 0;
-  align-self: center;
-}
-
-/* Основное тело: реквизиты + карта в ряд */
-.contact__body{
-  display: grid;
-  grid-template-columns: minmax(260px, 360px) 1fr;
-  gap: 24px;
-  align-items: start;
-}
-@media (max-width: 760px){
-  .contact__body{ grid-template-columns: 1fr; }
-}
-
-.contact{
-  display: grid;
-  gap: 10px;
+  padding: 24px;
   border-radius: 20px;
   border: 1px solid rgba(0,0,0,.10);
-  padding: 14px;
   background: rgba(0,0,0,.02);
 }
-.contact__row{ display: grid; grid-template-columns: 120px 1fr; gap: 10px; }
-@media (max-width: 520px){ .contact__row{ grid-template-columns: 1fr; } }
-.contact__label{ opacity: .65; font-size: 13px; }
-.contact__value{ font-weight: 800; }
-
-.contactActions{
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+@media (max-width: 760px){
+  .contact__info{ grid-template-columns: 1fr; gap: 16px; }
 }
 
-/* Карта — на всю оставшуюся ширину, высокая */
+.contact__info-label{
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .10em;
+  opacity: .55;
+  margin-bottom: 6px;
+}
+.contact__info-value{
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 900;
+  color: #111;
+  line-height: 1.3;
+}
+.contact__phone-link{
+  font-size: clamp(18px, 2.4vw, 26px);
+  font-weight: 900;
+  color: #111;
+  opacity: 1;
+  text-decoration: none;
+  transition: color .2s ease;
+}
+.contact__phone-link:hover{ color: var(--accent); }
+
+/* Карта во всю ширину */
 .contactMap{
   border-radius: 20px;
   overflow: hidden;
   background: #fff;
   border: 1px solid rgba(0,0,0,.10);
+  margin-bottom: 20px;
 }
 .contactMap iframe{
   width: 100%;
-  height: clamp(300px, 45vw, 480px);
+  height: clamp(300px, 48vw, 520px);
   border: 0;
   display: block;
+}
+
+/* Кнопки снизу */
+.contactActions{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Кнопка маршрута с анимацией моргания */
+.btn--route{
+  background: var(--accent);
+  color: #fff;
+  padding: 12px 24px;
+  font-size: 15px;
+  animation: routePulse 2.2s ease-in-out infinite;
+}
+.btn--route:hover{
+  animation: none;
+  transform: translateY(-2px);
+  opacity: .92;
+}
+@keyframes routePulse{
+  0%, 100%{ box-shadow: 0 0 0 0 rgba(255,45,45,.0); }
+  50%{ box-shadow: 0 0 0 10px rgba(255,45,45,.22), 0 4px 20px rgba(255,45,45,.35); }
 }
 
 /* Footer snap */
@@ -1106,12 +1124,6 @@ button{font-family:inherit}
   .pill{ padding: 9px 11px; font-size: 12px; }
 
   /* Logo block — компактнее, чтобы визуально походило на ПК */
-  .hero{
-    --logo-pad: 120px;
-    --logo-w: clamp(360px, 96vw, 600px);
-    --logo-x: clamp(-10px, -3vw, 0px);
-    --logo-y: clamp(-110px, -20vw, -60px);
-  }
 
   /* Cards / tiles / blocks */
   .section{ padding: 0; }
